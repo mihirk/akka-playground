@@ -7,6 +7,13 @@ import java.util.concurrent.TimeUnit;
 public class GoatCommunication {
     public static int i = 0;
 
+    private static void raceGoat(int goatNumber) {
+        System.out.println("[Outside loop] Goat " + goatNumber + " - " + i);
+        while (i < 100) {
+            System.out.println("Goat 3 - " + ++i);
+        }
+    }
+
     public static class Message implements Serializable {
         public String noise;
 
@@ -19,14 +26,7 @@ public class GoatCommunication {
         public String goat1Noise = "";
 
         public Goat1() {
-            raceGoat();
-        }
-
-        private void raceGoat() {
-            System.out.println("[Outside loop] Goat 1 - " + i);
-            while (i < 100) {
-                System.out.println("Goat 1 - " + ++i);
-            }
+            raceGoat(1);
         }
 
         @Override
@@ -40,14 +40,7 @@ public class GoatCommunication {
         public String goat2Noise = "";
 
         public Goat2() {
-            raceGoat();
-        }
-
-        private void raceGoat() {
-            System.out.println("[Outside loop] Goat 2 - " + i);
-            while (i < 100) {
-                System.out.println("Goat 2 - " + ++i);
-            }
+            raceGoat(2);
         }
 
         @Override
@@ -61,14 +54,7 @@ public class GoatCommunication {
         public String goat3Noise = "";
 
         public Goat3() {
-            raceGoat();
-        }
-
-        private void raceGoat() {
-            System.out.println("[Outside loop] Goat 3 - " + i);
-            while (i < 100) {
-                System.out.println("Goat 3 - " + ++i);
-            }
+            raceGoat(3);
         }
 
         @Override
