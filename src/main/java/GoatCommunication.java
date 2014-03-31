@@ -7,10 +7,15 @@ import java.util.concurrent.TimeUnit;
 public class GoatCommunication {
     public static int i = 0;
 
+    private static void printSenderAndMessage(Message noise, String senderName, String receiverName) {
+        Message goatNoise = (Message) noise;
+        System.out.println(senderName + " gave " + receiverName + " this message '" + goatNoise.noise + "'");
+    }
+
     private static void raceGoat(int goatNumber) {
         System.out.println("[Outside loop] Goat " + goatNumber + " - " + i);
         while (i < 100) {
-            System.out.println("Goat 3 - " + ++i);
+            System.out.println("Goat " + goatNumber + " - " + ++i);
         }
     }
 
@@ -26,13 +31,12 @@ public class GoatCommunication {
         public String goat1Noise = "";
 
         public Goat1() {
-            raceGoat(1);
+            raceGoat(1); //Race check for same resources
         }
 
         @Override
         public void onReceive(Object noise) throws Exception {
-            Message goat1Noise = (Message) noise;
-            System.out.println(goat1Noise.noise);
+            printSenderAndMessage((Message) noise, sender().path().name(), self().path().name());
         }
     }
 
@@ -40,13 +44,12 @@ public class GoatCommunication {
         public String goat2Noise = "";
 
         public Goat2() {
-            raceGoat(2);
+            raceGoat(2); //Race check for same resources
         }
 
         @Override
         public void onReceive(Object noise) throws Exception {
-            Message goat2Noise = (Message) noise;
-            System.out.println(goat2Noise.noise);
+            printSenderAndMessage((Message) noise, sender().path().name(), self().path().name());
         }
     }
 
@@ -54,13 +57,12 @@ public class GoatCommunication {
         public String goat3Noise = "";
 
         public Goat3() {
-            raceGoat(3);
+            raceGoat(3); //Race check for same resources
         }
 
         @Override
         public void onReceive(Object noise) throws Exception {
-            Message goat3Noise = (Message) noise;
-            System.out.println(goat3Noise.noise);
+            printSenderAndMessage((Message) noise, sender().path().name(), self().path().name());
 
         }
     }
@@ -71,10 +73,10 @@ public class GoatCommunication {
         final ActorRef goat1 = garden.actorOf(Props.create(Goat1.class), "Goat1");
         final ActorRef goat2 = garden.actorOf(Props.create(Goat2.class), "Goat2");
         final ActorRef goat3 = garden.actorOf(Props.create(Goat3.class), "Goat3");
-        goat1.tell(new Message("1"), ActorRef.noSender());
-        goat2.tell(new Message("2"), ActorRef.noSender());
-        goat3.tell(new Message("3"), ActorRef.noSender());
-        goat3.tell(new Message("4"), ActorRef.noSender());
+        goat1.tell(new Message("Hi Goat 1"), goat2);
+        goat2.tell(new Message("How are you Goat 2"), goat2);
+        goat3.tell(new Message("Hey Even Goat 3 is here"), goat1);
+        goat3.tell(new Message("Hi Goat 3"), goat2);
         garden.shutdown();
     }
 
